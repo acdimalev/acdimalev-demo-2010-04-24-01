@@ -10,10 +10,6 @@ float aspect = 320/240.0;
 
 int rps = 4;
 
-typedef float vec[4];
-typedef float mat[4 * 4];
-typedef float *mat_p;
-
 int main(int argc, char **argv) {
   SDL_Surface *sdl_surface;
   cairo_t *cr;
@@ -62,7 +58,7 @@ int main(int argc, char **argv) {
     int i;
 
     for (i = 0; i < 16; i = i + 1) {
-      drop[i] = 6;
+      drop[i] = -6 - 3;
       drop_vel[i] = -rand() % 3 - 1;
     }
 
@@ -115,16 +111,21 @@ int main(int argc, char **argv) {
       }
 
       for (i = 0; i < 16; i = i + 1) {
-        drop[i] = drop[i] + drop_vel[i] / fps;
-        if (drop[i] < -6 - 3) {
-          drop[i] = 6;
+        if (drop[i] > -6 - 3) {
+          drop[i] = drop[i] + drop_vel[i] / fps;
         }
       }
 
       now = SDL_GetTicks();
       if (now > next_rand) {
         for (i = 0; i < 16; i = i + 1) {
-          drop_vel[i] = -rand() % 3 - 1;
+          if (drop[i] > -6 - 3) {
+            drop_vel[i] = -rand() % 3 - 1;
+          } else {
+            if (rand() % 32 == 0) {
+              drop[i] = 6;
+            }
+          }
         }
         next_rand = next_rand + 1024.0 / rps;
       }
