@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
     next_rand = 1024.0 / rps;
   }
 
+  SDL_LockSurface(sdl_surface);
   while (running) {
 
     /* Render Frame */
